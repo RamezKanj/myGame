@@ -1,17 +1,19 @@
+const { Int32 } = require('mongodb')
 const mongoose = require('mongoose')
+const AutoIncrement = require('mongoose-sequence')(mongoose)
 
-const statSchema = new mongoose.Schema({
+const statsSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'User'
     },
     score: {
-        type: Integer,
+        type: Number,
         required: true
     },
     timer: {
-        type: Integer,
+        type: Number,
         required:true
     }
 },
@@ -20,4 +22,10 @@ const statSchema = new mongoose.Schema({
     }
 )
 
-module.exports = mongoose.model('Stats', statSchema)
+statsSchema.plugin(AutoIncrement, {
+    inc_field: 'number',
+    id: 'scoreNumber',
+    start_seq: 1
+})
+
+module.exports = mongoose.model('Stats', statsSchema)
